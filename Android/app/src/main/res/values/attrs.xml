@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="src" format="reference"></attr>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="src"></attr>
+    </declare-styleable>
+</resources>

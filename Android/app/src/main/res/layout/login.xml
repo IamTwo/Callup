@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_back"
+    android:padding="18dp"
+    android:gravity="center_horizontal">
+
+    <dlmj.callup.View.CircleImageView
+        android:layout_width="107dp"
+        android:layout_height="107dp"
+        view:src="@drawable/default_photo"/>
+
+    <LinearLayout
+        style="@style/LoginLayout">
+        <ImageView
+            android:layout_width="19dp"
+            android:layout_height="24dp"
+            android:src="@drawable/account_icon"/>
+
+        <EditText
+            android:id="@+id/editText_account"
+            style="@style/LoginEditText"/>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LoginLayout">
+        <ImageView
+            android:layout_width="19dp"
+            android:layout_height="24dp"
+            android:src="@drawable/password_icon"/>
+
+        <EditText
+            android:id="@+id/editText_password"
+            style="@style/LoginEditText"
+            android:password="true"/>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/login_btn_back"
+        android:text="@string/login"
+        android:layout_marginTop="27dp"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/register"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/black"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/forget_password"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+
+    <View android:layout_width="0dp"
+        android:layout_height="0dp"/>
+</LinearLayout>

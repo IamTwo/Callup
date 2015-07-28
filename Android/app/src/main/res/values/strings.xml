@@ -4,5 +4,8 @@
     <string name="app_name">Callup</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="forget_password">Forget Password?</string>
 
 </resources>

@@ -1,9 +1,11 @@
-package dlmj.callup;
+package dlmj.callup.Activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import dlmj.callup.R;
 
 
 public class MainActivity extends ActionBarActivity {

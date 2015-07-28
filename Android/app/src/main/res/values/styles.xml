@@ -5,4 +5,36 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="LoginAlertDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="IntroduceButton">
+        <item name="android:layout_height">46dp</item>
+        <item name="android:layout_width">94dp</item>
+        <item name="android:background">@drawable/introduce_btn_back</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="LoginEditText">
+        <item name="android:layout_width">220dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="LoginLayout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/login_edittext_back</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:paddingBottom">3dp</item>
+    </style>
 </resources>
