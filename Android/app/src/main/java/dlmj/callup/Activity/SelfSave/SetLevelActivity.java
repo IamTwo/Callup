@@ -25,8 +25,8 @@ public class SetLevelActivity extends Activity {
 
     private void findView() {
         mLevelViewPager = (ViewPager)findViewById(R.id.layoutViewPager);
-        LevelAdapter levelAdapter = new LevelAdapter()
-        mLevelViewPager.setAdapter();
+//        LevelAdapter levelAdapter = new LevelAdapter()
+//        mLevelViewPager.setAdapter();
     }
 
     private void loadLevels(){
