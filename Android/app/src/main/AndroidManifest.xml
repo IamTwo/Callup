@@ -16,6 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Activity.MainActivity">
+        </activity>
+
+        <activity android:name=".Activity.SelfSave.SetLevelActivity">
+        </activity>
+
     </application>
 
 </manifest>

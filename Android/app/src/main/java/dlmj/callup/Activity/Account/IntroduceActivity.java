@@ -3,11 +3,13 @@ package dlmj.callup.Activity.Account;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import dlmj.callup.Activity.MainActivity;
 import dlmj.callup.R;
 
 /**
@@ -26,6 +28,22 @@ public class IntroduceActivity extends Activity{
         setListener();
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mLoginDialog.dismiss();
+    }
+
+    private View.OnClickListener mOnLoginClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setClass(IntroduceActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    };
+
     private void findView() {
         mLoginButton = (Button)findViewById(R.id.loginButton);
         mRegisterButton = (Button)findViewById(R.id.registerButton);
@@ -43,6 +61,9 @@ public class IntroduceActivity extends Activity{
 
                 mLoginButton.setVisibility(View.INVISIBLE);
                 mRegisterButton.setVisibility(View.INVISIBLE);
+
+                Button loginButton = (Button) loginView.findViewById(R.id.loginButton);
+                loginButton.setOnClickListener(mOnLoginClickListener);
             }
         });
 

@@ -7,5 +7,9 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="forget_password">Forget Password?</string>
+    <string name="self_save">Self Save</string>
+    <string name="friend_bomb">Friend Bomb</string>
+    <string name="set_level_header">The Difficulty Level Of Getting Up</string>
+    <string name="slide_left">If you Slide Left</string>
 
 </resources>
