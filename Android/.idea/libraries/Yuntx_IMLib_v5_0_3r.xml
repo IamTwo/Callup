@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Yuntx_IMLib_v5.0.3r">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/Yuntx_IMLib_v5.0.3r.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

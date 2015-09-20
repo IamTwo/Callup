@@ -5,8 +5,36 @@
         jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/Android/Volley/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="b4165575b8fb2afc4f1cd373c981501fa24dec71">
+        sha1="77155b1befffa3d33b89c7362bfa9dacbca4b7f2">
         <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-b2f3e92116afc42fcf01ec6902a8f90afa548d9c.jar" />
+    </item>
+    <item
+        jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/Android/PullToRefresh/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="116f60b8bea651b1701435b402ec88e6cd33634e">
+        <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-f3083b7e652541aaf14df80623d2ccbe45f2b526.jar" />
+    </item>
+    <item
+        jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/Android/Slidingmenu/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a01e376a7862a46569dddb965672da8c22641bd3">
+        <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-6487c3955d07539f3ba422a258a47e46443d0ba9.jar" />
+    </item>
+    <item
+        jar="/Users/apple/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-cfde98668f6229028b66e54bd8fbce2b7b03a289.jar" />
+    </item>
+    <item
+        jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-2714da04b6de85311dbb0acef8d152d832a84944.jar" />
     </item>
     <item
         jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
@@ -23,18 +51,18 @@
         <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-fe3e033f16158abfaa7e9584becf3fad8cb50785.jar" />
     </item>
     <item
-        jar="/Users/apple/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/net.simonvt.menudrawer/menudrawer/3.0.6/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-cfde98668f6229028b66e54bd8fbce2b7b03a289.jar" />
+        sha1="6c43e8970e14e22ed8ea6bee207b27829422d516">
+        <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-2c44ee5eb513af2803f3187d14f8e4f31e6d3393.jar" />
     </item>
     <item
-        jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jar="/Users/apple/Documents/Project/Callup/Android/app/libs/Yuntx_IMLib_v5.0.3r.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-2714da04b6de85311dbb0acef8d152d832a84944.jar" />
+        sha1="12f5a67e5160911ab855c2dd603be4ec894061e7">
+        <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/Yuntx_IMLib_v5.0.3r-d05234be3fb5cbb458308a14b44a420cc4f176bb.jar" />
     </item>
 
 </items>

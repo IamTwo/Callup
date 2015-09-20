@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_967bdc">
+
+    <RelativeLayout
+        android:layout_width="320dp"
+        android:layout_height="485dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/alarm_ring_back">
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/sceneImageView"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="9dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/sceneNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/swingTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:text="0"/>
+</RelativeLayout>

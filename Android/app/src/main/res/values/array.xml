@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="level_image">
+        <item>@drawable/level_not_want_get_up</item>
+        <item>@drawable/level_dizzy</item>
+        <item>@drawable/level_dreamful</item>
+        <item>@drawable/level_insomnia</item>
+        <item>@drawable/level_often_stay_up</item>
+        <item>@drawable/level_upset</item>
+    </string-array>
+
+    <string-array name="level_str">
+        <item>@string/not_want_get_up</item>
+        <item>@string/dizzy</item>
+        <item>@string/dreamful</item>
+        <item>@string/insomnia</item>
+        <item>@string/often_stay_up</item>
+        <item>@string/upset</item>
+    </string-array>
+
+    <string-array name="scene_back_color">
+        <item>@color/red_ed5564</item>
+        <item>@color/orange_fb6e52</item>
+        <item>@color/yellow_ffce55</item>
+        <item>@color/green_a0d468</item>
+        <item>@color/blue_48cfae</item>
+        <item>@color/blue_4fc0e8</item>
+        <item>@color/blue_5d9cec</item>
+        <item>@color/purple_ec87bf</item>
+        <item>@color/gray_656d78</item>
+    </string-array>
+</resources>

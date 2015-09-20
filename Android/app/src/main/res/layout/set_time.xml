@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/set_time_back"
+    android:gravity="center_horizontal"
+    android:padding="10dp">
+    <TimePicker
+        android:id="@+id/alarmTimePicker"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/repeat"
+        android:gravity="start"
+        android:paddingLeft="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <Button
+            android:id="@+id/everydayButton"
+            style="@style/RepeatTimeTextView"
+            android:text="@string/everyday"/>
+
+        <Button
+            android:id="@+id/weekdaysButton"
+            style="@style/RepeatTimeTextView"
+            android:text="@string/weekdays"/>
+
+        <Button
+            android:id="@+id/weekendsButton"
+            style="@style/RepeatTimeTextView"
+            android:text="@string/weekends"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/MonButton"
+            style="@style/DayButton"
+            android:text="1"/>
+
+        <Button
+            android:id="@+id/TueButton"
+            style="@style/DayButton"
+            android:text="2"/>
+
+        <Button
+            android:id="@+id/WedButton"
+            style="@style/DayButton"
+            android:text="3"/>
+
+        <Button
+            android:id="@+id/ThurButton"
+            style="@style/DayButton"
+            android:text="4"/>
+
+        <Button
+            android:id="@+id/FriButton"
+            style="@style/DayButton"
+            android:text="5"/>
+
+        <Button
+            android:id="@+id/SatButton"
+            style="@style/DayButton"
+            android:text="6"/>
+
+        <Button
+            android:id="@+id/SunButton"
+            style="@style/DayButton"
+            android:text="7"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:textSize="15sp"
+            android:text="@string/cancel"
+            android:background="@drawable/cancel_btn_back"/>
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:textSize="15sp"
+            android:text="@string/submit"
+            android:background="@drawable/submit_btn_back"
+            android:layout_marginLeft="15dp"/>
+    </LinearLayout>
+
+</LinearLayout>

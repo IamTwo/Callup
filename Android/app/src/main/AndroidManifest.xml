@@ -2,14 +2,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dlmj.callup" >
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
+        android:name=".CallUpApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Activity.Account.IntroduceActivity"
-            android:label="@string/app_name" >
+            android:name=".UI.Activity.Account.IntroduceActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,12 +41,51 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activity.MainActivity">
+        <activity
+            android:name=".UI.Activity.MainActivity"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".Activity.SelfSave.SetLevelActivity">
+        <activity
+            android:name=".UI.Activity.MenuActivity"
+            android:screenOrientation="portrait">
         </activity>
 
+
+        <activity
+            android:name=".UI.Activity.SelfSave.SetLevelActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".UI.Activity.SelfSave.AlarmActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".UI.Activity.FriendBomb.FriendListActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <service android:name=".Service.AlarmService">
+        </service>
+
+        <service
+            android:name="com.yuntongxun.ecsdk.ECClientService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name=".BroadcastReceiver.AlarmReceiver">
+            <intent-filter> 
+                <action android:name="android.intent.action.MY_BROADCAST"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".BroadcastReceiver.BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.HOME"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

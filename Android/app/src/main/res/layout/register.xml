@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_back"
+    android:padding="18dp"
+    android:gravity="center_horizontal">
 
+    <LinearLayout
+        style="@style/AccountLayout"
+        android:layout_marginTop="8dp">
+
+        <TextView style="@style/RegisterTextView"
+            android:text="@string/phone"/>
+
+        <EditText
+            android:id="@+id/editText_phone"
+            style="@style/AccountEditText"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="39dp"
+            android:background="@drawable/register_btn_back"
+            android:text="@string/send_verification_code"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:padding="3dp"/>
+
+        <EditText
+            android:layout_width="187dp"
+            android:layout_height="match_parent"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/AccountLayout">
+
+        <TextView style="@style/RegisterTextView"
+            android:text="@string/my_password"/>
+
+        <EditText
+            android:id="@+id/editText_password"
+            style="@style/AccountEditText"/>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/AccountLayout">
+
+        <TextView style="@style/RegisterTextView"
+            android:text="@string/re_input_password"/>
+
+        <EditText
+            android:id="@+id/editText_reInput_password"
+            style="@style/AccountEditText"/>
+    </LinearLayout>
+
+    <Button android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:background="@drawable/register_btn_back"
+        android:text="@string/register"
+        android:layout_marginTop="33dp"
+        android:textColor="@android:color/white"/>
 </LinearLayout>

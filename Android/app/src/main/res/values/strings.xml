@@ -11,5 +11,40 @@
     <string name="friend_bomb">Friend Bomb</string>
     <string name="set_level_header">The Difficulty Level Of Getting Up</string>
     <string name="slide_left">If you Slide Left</string>
+    <string name="not_want_get_up">Don\'t Want To Get Up</string>
+    <string name="dizzy">Feel Dizzy When Getting Up</string>
+    <string name="dreamful">Always Dreamful</string>
+    <string name="insomnia">Always Insomnic</string>
+    <string name="often_stay_up">Often Stay Up</string>
+    <string name="upset">Upset Without Reason</string>
+    <string name="search_scene">Search Scene</string>
+    <string name="phone">Register Phone: </string>
+    <string name="send_verification_code">Send Verification Code</string>
+    <string name="my_password">My Password: </string>
+    <string name="re_input_password">Re-input Password: </string>
+    <string name="error_login_failed">Account or password error.\nEnter again. </string>
+    <string name="error_server_connection_failed">Failed to connect the server.</string>
+    <string name="ok">OK</string>
+    <string name="submit">Submit</string>
+    <string name="clock_list">Clock List</string>
+    <string name="choose_level_finished_message">If you have finished choosing conditions before,
+        please click the below button to join Call Up travel&#8230;
+    </string>
+    <string name="road">Road</string>
+    <string name="cancel">Cancel</string>
+    <string name="repeat">Repeat</string>
+    <string name="everyday">Everyday</string>
+    <string name="weekdays">Weekdays</string>
+    <string name="weekends">Weekends</string>
 
+    <string name="search_friends">Search PK Friends or Groups</string>
+    <string name="register_params_error">IM register params error，please check it.</string>
+
+    <string name="delete">Delete</string>
+    <string name="alarm_operation">Alarm Operation</string>
+
+    <string name="error_fragment_not_found">Fragment %s not found!</string>
+    <string name="bombs">Bombs</string>
+    <string name="friends">Friends</string>
+    <string name="random">Random</string>
 </resources>

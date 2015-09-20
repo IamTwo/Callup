@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_58c1f8">#9e85d2</color>
+    <color name="purple_967bdc">#967bdc</color>
     <color name="gray_b3afb9">#b3afb9</color>
     <color name="gray_626569">#626569</color>
+    <color name="red_d95753">#d95753</color>
+    <color name="white_transparent">#f0ffffff</color>
+    <color name="blue_3baeda">#3baeda</color>
+
+    <color name="purple_ac92ed">#ac92ed</color>
+    <color name="red_ed5564">#ed5564</color>
+    <color name="orange_fb6e52">#fb6e52</color>
+    <color name="yellow_ffce55">#ffce55</color>
+    <color name="green_a0d468">#a0d468</color>
+    <color name="blue_48cfae">#48cfae</color>
+    <color name="blue_4fc0e8">#4fc0e8</color>
+    <color name="blue_5d9cec">#5d9cec</color>
+    <color name="purple_ec87bf">#ec87bf</color>
+    <color name="gray_656d78">#656d78</color>
+    <color name="gray_ccd0d9">#ccd0d9</color>
+    <color name="gray_aab2bd">#aab2bd</color>
 </resources>

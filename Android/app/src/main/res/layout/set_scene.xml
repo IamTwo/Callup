@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_967bdc">
+
+    <RelativeLayout
+        android:id="@+id/sceneLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical">
+        <Button
+            android:id="@+id/menuButton"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:background="@drawable/menu_back"
+            android:layout_margin="10dp"/>
+
+        <RelativeLayout
+            android:layout_width="244dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/search_text_back"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_toRightOf="@id/menuButton"
+            android:layout_toEndOf="@id/menuButton">
+
+            <Button
+                android:id="@+id/searchEditText"
+                android:layout_width="54dp"
+                android:layout_height="34dp"
+                android:layout_marginRight="6dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/search_btn_back"
+                android:layout_alignParentRight="true"/>
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_toLeftOf="@id/searchEditText"
+                android:layout_toStartOf="@id/searchEditText"
+                android:hint="@string/search_scene"
+                android:textColorHint="@android:color/darker_gray"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:padding="2dp"
+                android:background="@null"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        android:id="@+id/sceneGridView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:numColumns="2"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/sceneLayout"
+        android:background="@android:color/transparent"/>
+</RelativeLayout>

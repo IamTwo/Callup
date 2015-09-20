@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "dlmj.callup"
-        minSdkVersion 11
+        minSdkVersion 12
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -22,5 +22,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'net.simonvt.menudrawer:menudrawer:3.0.6'
     compile project(':Volley')
+    compile project(':Slidingmenu')
+    compile project(':PullToRefresh')
 }
