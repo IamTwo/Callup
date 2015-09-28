@@ -1,28 +1,20 @@
 package dlmj.callup.BusinessLogic.Cache;
 
-import android.content.Context;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import dlmj.callup.Common.Model.Alarm;
+import dlmj.callup.Common.Util.LogUtil;
 
 /**
  * Created by Two on 15/8/29.
  */
-public class AlarmCache {
+public class AlarmCache extends BaseCache<Alarm>{
     private static AlarmCache mInstance;
+    private final static String TAG = "AlarmCache";
 
-    /**
-     * The list of alarm items..
-     */
-    private List<Alarm> mAlarmList;
-
-    public AlarmCache(){
-        mAlarmList = new LinkedList<>();
+    public AlarmCache() {
+        super();
     }
 
-    public static final AlarmCache getInstance(){
+    public static AlarmCache getInstance(){
         synchronized (AlarmCache.class){
             if(mInstance == null){
                 mInstance = new AlarmCache();
@@ -31,24 +23,25 @@ public class AlarmCache {
         return mInstance;
     }
 
-    public void setAlarmList(List<Alarm> alarmList){
-        mAlarmList = alarmList;
-    }
-
-    public List<Alarm> getAlarmList(){
-        return mAlarmList;
-    }
-
-    public void addAlarm(Alarm alarm) {
-        mAlarmList.add(alarm);
-    }
-
-    public void removeAlarm(int alarmId) {
-        for(Alarm alarm : mAlarmList) {
+    public void updateAlarm(int alarmId, String time) {
+        for(Alarm alarm : mList) {
             if(alarm.getAlarmId() == alarmId) {
-                mAlarmList.remove(alarm);
+                LogUtil.d(TAG, "Remove alarm [" + alarmId + "] in alarm cache.");
+                mList.remove(alarm);
+                alarm.setTime(time);
+                mList.add(alarm);
                 break;
             }
         }
+    }
+
+    public Alarm getAlarm(int alarmId) {
+        for(Alarm alarm : mList) {
+            if(alarm.getAlarmId() == alarmId) {
+                return alarm;
+            }
+        }
+
+        return null;
     }
 }

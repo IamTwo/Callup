@@ -1,52 +1,44 @@
 package dlmj.callup.Common.Model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created by Two on 15/9/8.
  */
 public class ClientUser {
-    private String mAccount;
-    private String mUserName;
-    private String mAppKey;
-    private String mAppToken;
+    private int mUserId;
+    private String mSid;
+    private String mName;
+    private String mLocation;
+    private int mLevel;
+    private String mUserState;
+    private String mImageUrl;
+    private String mFaceUrl;
 
-    public String getAccount() {
-        return mAccount;
+    public ClientUser(int userId, String sid, String name, String location,
+                      int level, String userState, String imageUrl,
+                      String faceUrl) {
+        mUserId = userId;
+        mSid = sid;
+        mName = name;
+        mLocation = location;
+        mLevel = level;
+        mUserState = userState;
+        mImageUrl = imageUrl;
+        mFaceUrl = faceUrl;
+    }
+
+    public int getUserId() {
+        return mUserId;
+    }
+
+    public String getSid() {
+        return mSid;
+    }
+
+    public String getFaceUrl() {
+        return mFaceUrl;
     }
 
     public String getUserName() {
-        return mUserName;
-    }
-
-    public String getAppKey() {
-        return mAppKey;
-    }
-
-    public String getAppToken() {
-        return mAppToken;
-    }
-
-    public ClientUser from(String input) {
-        JSONObject object = null;
-        try {
-            object = new JSONObject(input);
-            if(object.has("account")) {
-                this.mAccount = object.getString("account");
-            }
-            if(object.has("userName")) {
-                this.mUserName = object.getString("userName");
-            }
-            if(object.has("appKey")) {
-                this.mAppKey = object.getString("appKey");
-            }
-            if(object.has("appToken")) {
-                this.mAppToken = object.getString("appToken");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return this;
+        return mName;
     }
 }

@@ -1,9 +1,11 @@
 package dlmj.callup.UI.Fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import dlmj.callup.UI.Activity.MenuActivity;
@@ -16,7 +18,15 @@ public class CallUpFragment extends Fragment{
     private View.OnClickListener mMenuClickListener;
 
     protected void setListener(){
-        mMenuButton.setOnClickListener(mMenuClickListener);
+        mMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager inputMethodManager = (InputMethodManager)
+                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                mMenuClickListener.onClick(view);
+            }
+        });
     }
 
     @Override

@@ -1,6 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/purple_967bdc">
+        <Button
+            android:id="@+id/menuButton"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:background="@drawable/menu_back"
+            android:layout_margin="10dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@string/settings"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@android:color/white">
+        <TextView
+            style="@style/SettingItemTextView"
+            android:text="@string/my_account"/>
+
+        <ImageView
+            style="@style/RightBracketImageView"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="20dp">
+        <TextView
+            style="@style/SettingItemTextView"
+            android:text="@string/level_setting"/>
+
+        <ImageView
+            style="@style/RightBracketImageView"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="20dp">
+        <TextView
+            style="@style/SettingItemTextView"
+            android:text="@string/about_callup"/>
+
+        <ImageView
+            style="@style/RightBracketImageView"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/logOutButton"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="@string/logout"
+        android:gravity="center"
+        android:background="@drawable/logout_btn_back"
+        android:textSize="16sp"/>
 </LinearLayout>

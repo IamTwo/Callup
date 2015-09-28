@@ -116,7 +116,7 @@ public class SetLevelActivity extends Activity {
     private void loadLevels() {
         LevelCache levelCache = LevelCache.getInstance(this);
         List<View> levelViews = new ArrayList<>();
-        List<Level> levels = levelCache.getLevels();
+        List<Level> levels = levelCache.getList();
         for (int i = 0; i < levels.size(); i++) {
             View view = LayoutInflater.from(this)
                     .inflate(R.layout.level_item, null);

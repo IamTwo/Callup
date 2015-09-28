@@ -1,24 +1,18 @@
 package dlmj.callup.BusinessLogic.Cache;
 
-import android.content.Context;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import dlmj.callup.Common.Model.Scene;
 
 /**
  * Created by Two on 15/8/29.
  */
-public class SceneCache {
+public class SceneCache extends BaseCache<Scene>{
     private static SceneCache mInstance;
-    private List<Scene> mSceneList;
 
     public SceneCache(){
-        mSceneList = new LinkedList<>();
+        super();
     }
 
-    public static final SceneCache getInstance(Context context){
+    public static final SceneCache getInstance(){
         synchronized (SceneCache.class){
             if(mInstance == null){
                 mInstance = new SceneCache();
@@ -27,11 +21,13 @@ public class SceneCache {
         return mInstance;
     }
 
-    public void setSceneList(List<Scene> sceneList){
-        mSceneList = sceneList;
-    }
+    public Scene getScene(int sceneId) {
+        for(Scene scene : mList) {
+            if(scene.getSceneId() == sceneId) {
+                return scene;
+            }
+        }
 
-    public List<Scene> getSceneList(){
-        return mSceneList;
+        return null;
     }
 }

@@ -32,6 +32,7 @@ import java.util.Map;
 import dlmj.callup.BusinessLogic.Cache.AlarmCache;
 import dlmj.callup.Common.Factory.BackColorFactory;
 import dlmj.callup.Common.Factory.FragmentFactory;
+import dlmj.callup.Common.Factory.FrequentFactory;
 import dlmj.callup.Common.Interfaces.ChangeFragmentListener;
 import dlmj.callup.Common.Interfaces.DialogListener;
 import dlmj.callup.Common.Interfaces.UIDataListener;
@@ -57,11 +58,9 @@ public class SetAlarmFragment extends CallUpFragment{
     private List<Alarm> mAlarmList = new LinkedList<>();
     private ChangeFragmentListener mChangeFragmentListener;
     private DialogListener mDialogListener;
-    private List<PendingIntent> mPendingIntents = new LinkedList<>();
-    private AlarmManager mAlarmManager;
     private BackColorFactory mBackColorFactory;
+    private FrequentFactory mFrequentFactory;
     private SetAlarmTimeDialog mSetAlarmTimeDialog;
-    private Alarm mCurrentAlarm;
 
     private NetworkHelper mDeleteAlarmNetworkHelper;
     private NetworkHelper mGetAlarmsNetworkHelper;
@@ -124,7 +123,8 @@ public class SetAlarmFragment extends CallUpFragment{
         mPullToRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pullRefreshList);
         ListView actualListView = mPullToRefreshListView.getRefreshableView();
         mAddButton = (Button) view.findViewById(R.id.addAlarmButton);
-        mAlarmAdapter = new AlarmAdapter(this.getActivity(), mAlarmList, mBackColorFactory);
+        mAlarmAdapter = new AlarmAdapter(this.getActivity(), mAlarmList,
+                mBackColorFactory, mFrequentFactory);
         actualListView.setAdapter(mAlarmAdapter);
         mSetAlarmTimeDialog = new SetAlarmTimeDialog(getActivity());
     }
@@ -146,16 +146,6 @@ public class SetAlarmFragment extends CallUpFragment{
 //            public void ChangeFragment(FragmentFactory.FragmentName fragmentName) {
 //                getActivity().getSupportFragmentManager().beginTransaction()
 //                        .replace(R.id.content_frame, ).commit();
-//
-//
-//
-//                Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-//                intent.putExtra(IntentExtraParams.SCENE, scene);
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(),
-//                        scene.getSceneId(), intent, 0);
-//                AlarmManager alarmManager = (AlarmManager) getBaseContext().getSystemService(Context.ALARM_SERVICE);
-//                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                        pendingIntent);
 //            }
 //        });
 
@@ -164,7 +154,6 @@ public class SetAlarmFragment extends CallUpFragment{
             @Override
             public void onDataChanged(Bean data) {
                 try{
-                    cancelPendingIntents();
                     JSONObject result = new JSONObject(data.getResult());
                     String alarmListStr = result.getString("alarm.list");
                     JSONArray alarmList = new JSONArray(alarmListStr);
@@ -180,13 +169,13 @@ public class SetAlarmFragment extends CallUpFragment{
                                 alarm.getString("Picture"),
                                 alarm.getString("Name"),
                                 alarm.getString("Time"),
-                                alarm.getString("frequent_type")));
+                                alarm.getString("frequent_type"),
+                                alarm.getString("Audio")));
                     }
                     mAlarmAdapter.notifyDataSetChanged();
-                    AlarmCache.getInstance().setAlarmList(mAlarmList);
+                    AlarmCache.getInstance().setList(mAlarmList);
                     Log.d("result", result.toString());
                     mPullToRefreshListView.onRefreshComplete();
-                    setPendingIntents();
                 }catch(JSONException ex) {
                     LogUtil.e(TAG, ex.getMessage());
                 }
@@ -240,35 +229,14 @@ public class SetAlarmFragment extends CallUpFragment{
         mDeleteAlarmNetworkHelper = new NetworkHelper(this.getActivity());
 
         mBackColorFactory = new BackColorFactory(getActivity());
+        mFrequentFactory = new FrequentFactory(getActivity());
         AlarmCache alarmCache = AlarmCache.getInstance();
-        if (alarmCache.getAlarmList().size() > 0) {
-            mAlarmList = alarmCache.getAlarmList();
+        if (alarmCache.getList().size() > 0) {
+            mAlarmList = alarmCache.getList();
         } else {
             Map<String, String> params = new HashMap<>();
             mGetAlarmsNetworkHelper.sendGetRequest(UrlParams.GET_ALARMS_URL, params);
         }
-        mAlarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
     }
 
-    private void setPendingIntents(){
-//        Calendar calendar;
-//        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-//
-//        for(Alarm alarm : mAlarmList){
-//            calendar = Calendar.getInstance();
-//            AlarmTime alarmTime = new AlarmTime(alarm.getTime());
-//            calendar.set(Calendar.HOUR_OF_DAY, alarmTime.getHour());
-//            calendar.set(Calendar.MINUTE, alarmTime.getMinute());
-//            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), 0, intent, 0);
-//            mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                    pendingIntent);
-//            mPendingIntents.add(pendingIntent);
-//        }
-    }
-
-    private void cancelPendingIntents() {
-        for(PendingIntent pendingIntent : mPendingIntents){
-            mAlarmManager.cancel(pendingIntent);
-        }
-    }
 }

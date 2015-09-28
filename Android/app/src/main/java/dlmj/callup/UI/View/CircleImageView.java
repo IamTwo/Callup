@@ -8,19 +8,29 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.util.TypedValue;
+import android.view.ViewGroup;
+
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 
 import dlmj.callup.R;
 
 /**
  * Created by Two on 15/7/28.
  */
-public class CircleImageView extends ImageView {
-
+public class CircleImageView extends NetworkImageView {
+    private static final int TYPE_CIRCLE = 0;
+    private static final int TYPE_ROUND = 1;
     private int mWidth;
     private int mHeight;
-    private Bitmap mSrc;
+    private int mType;
+    private int mRadius;
+    private Bitmap mCurrentBitmap;
 
     public CircleImageView(Context context) {
         this(context, null);
@@ -38,9 +48,13 @@ public class CircleImageView extends ImageView {
         for (int i = 0; i < count; i++) {
             int attr = array.getIndex(i);
             switch (attr) {
-                case R.styleable.CircleImageView_src:
-                    mSrc = BitmapFactory.decodeResource(getResources(),
-                            array.getResourceId(attr, 0));
+                case R.styleable.CircleImageView_type:
+                    mType = array.getInt(attr, 0);
+                    break;
+                case R.styleable.CircleImageView_borderRadius:
+                    mRadius= array.getDimensionPixelSize(attr,
+                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f,
+                            getResources().getDisplayMetrics()));
                     break;
             }
         }
@@ -54,9 +68,9 @@ public class CircleImageView extends ImageView {
 
         if (specMode == MeasureSpec.EXACTLY) {
             mWidth = specSize;
-        } else {
+        } else if(mCurrentBitmap != null) {
             int desireWidth = getPaddingLeft() + getPaddingRight()
-                    + mSrc.getWidth();
+                    + mCurrentBitmap.getWidth();
             if (specMode == MeasureSpec.AT_MOST) {
                 mWidth = Math.min(desireWidth, specSize);
             } else {
@@ -70,7 +84,7 @@ public class CircleImageView extends ImageView {
             mHeight = specSize;
         } else {
             int desireHeight = getPaddingTop() + getPaddingBottom()
-                    + mSrc.getHeight();
+                    + mCurrentBitmap.getHeight();
 
             if (specMode == MeasureSpec.AT_MOST) {
                 mHeight = Math.min(desireHeight, specSize);
@@ -85,9 +99,24 @@ public class CircleImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         int min = Math.min(mWidth, mHeight);
+        switch(mType) {
+            case TYPE_CIRCLE:
 
-        mSrc = Bitmap.createScaledBitmap(mSrc, min, min, false);
-        canvas.drawBitmap(createCircleImage(mSrc, min), 0, 0, null);
+                if(mCurrentBitmap != null) {
+                    Bitmap src = Bitmap.createScaledBitmap(
+                            mCurrentBitmap, min, min, false);
+                    canvas.drawBitmap(createCircleImage(src, min), 0, 0, null);
+                }
+                break;
+            case TYPE_ROUND:
+                if(mCurrentBitmap != null) {
+                    Bitmap src = Bitmap.createScaledBitmap(
+                            mCurrentBitmap, min, min, false);
+                    canvas.drawBitmap(createRoundCornerImage(src), 0, 0, null);
+                }
+                break;
+        }
+
     }
 
     private Bitmap createCircleImage(Bitmap source, int min) {
@@ -101,5 +130,117 @@ public class CircleImageView extends ImageView {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(source, 0, 0, paint);
         return target;
+    }
+
+    private Bitmap createRoundCornerImage(Bitmap source) {
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        Bitmap target = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(target);
+        RectF rect = new RectF(0, 0, source.getWidth(), source.getHeight());
+        canvas.drawRoundRect(rect, mRadius, mRadius, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(source, 0, 0, paint);
+        return target;
+    }
+
+    @Override
+    protected void loadImageIfNecessary(final boolean isInLayoutPass) {
+        int width = getWidth();
+        int height = getHeight();
+        ScaleType scaleType = getScaleType();
+
+        boolean wrapWidth = false, wrapHeight = false;
+        if (getLayoutParams() != null) {
+            wrapWidth = getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT;
+            wrapHeight = getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+
+        // if the view's bounds aren't known yet, and this is not a wrap-content/wrap-content
+        // view, hold off on loading the image.
+        boolean isFullyWrapContent = wrapWidth && wrapHeight;
+        if (width == 0 && height == 0 && !isFullyWrapContent) {
+            return;
+        }
+
+        // if the URL to be loaded in this view is empty, cancel any old requests and clear the
+        // currently loaded image.
+        if (TextUtils.isEmpty(mUrl)) {
+            if (mImageContainer != null) {
+                mImageContainer.cancelRequest();
+                mImageContainer = null;
+            }
+            setDefaultImageOrNull();
+            return;
+        }
+
+        // if there was an old request in this view, check if it needs to be canceled.
+        if (mImageContainer != null && mImageContainer.getRequestUrl() != null) {
+            if (mImageContainer.getRequestUrl().equals(mUrl)) {
+                // if the request is from the same URL, return.
+                return;
+            } else {
+                // if there is a pre-existing request, cancel it if it's fetching a different URL.
+                mImageContainer.cancelRequest();
+                setDefaultImageOrNull();
+            }
+        }
+
+        // Calculate the max image width / height to use while ignoring WRAP_CONTENT dimens.
+        int maxWidth = wrapWidth ? 0 : width;
+        int maxHeight = wrapHeight ? 0 : height;
+
+        // The pre-existing content of this view didn't match the current URL. Load the new image
+        // from the network.
+        ImageLoader.ImageContainer newContainer = mImageLoader.get(mUrl,
+                new ImageLoader.ImageListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (mErrorImageId != 0) {
+                            setImageResource(mErrorImageId);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(final ImageLoader.ImageContainer response, boolean isImmediate) {
+                        // If this was an immediate response that was delivered inside of a layout
+                        // pass do not set the image immediately as it will trigger a requestLayout
+                        // inside of a layout. Instead, defer setting the image by posting back to
+                        // the main thread.
+                        if (isImmediate && isInLayoutPass) {
+                            post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onResponse(response, false);
+                                }
+                            });
+                            return;
+                        }
+
+                        if (response.getBitmap() != null) {
+                            mCurrentBitmap = response.getBitmap();
+                            setImageBitmap(response.getBitmap());
+                        } else if (mDefaultImageId != 0) {
+                            mCurrentBitmap = BitmapFactory.decodeResource(getResources(),
+                                    mDefaultImageId);
+                            setImageResource(mDefaultImageId);
+                        }
+                    }
+                }, maxWidth, maxHeight, scaleType);
+
+        // update the ImageContainer to be the new bitmap container.
+        mImageContainer = newContainer;
+    }
+
+    protected void setDefaultImageOrNull() {
+        if(mDefaultImageId != 0) {
+            setImageResource(mDefaultImageId);
+            mCurrentBitmap = BitmapFactory.decodeResource(getResources(),
+                    mDefaultImageId);
+        }
+        else {
+            setImageBitmap(null);
+            mCurrentBitmap = null;
+        }
     }
 }

@@ -1,39 +1,72 @@
 package dlmj.callup.BusinessLogic.Cache;
 
 import android.content.SharedPreferences;
-import android.text.TextUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import dlmj.callup.Common.Model.ClientUser;
 import dlmj.callup.Common.Params.SharedPreferenceSettings;
 import dlmj.callup.Common.Util.CallUpPreferences;
+import dlmj.callup.Common.Util.LogUtil;
 
 /**
  * Created by Two on 15/9/8.
  */
 public class UserCache {
-    private static ClientUser mClientUser;
+    private final static String TAG = "UserCache";
+    private ClientUser mClientUser;
+    private static UserCache mInstance;
+    private SharedPreferences mSharedPreferences;
 
-    public static void setClientUser(ClientUser clientUser) {
-        mClientUser = clientUser;
+    private UserCache() {
+        mSharedPreferences = CallUpPreferences.getSharedPreferences();
     }
 
-    public static ClientUser getClientUser() {
+    public static UserCache getInstance(){
+        synchronized (UserCache.class){
+            if(mInstance == null){
+                mInstance = new UserCache();
+            }
+        }
+        return mInstance;
+    }
+
+    public void setClientUser(String userInfoStr) {
+        mClientUser = from(userInfoStr);
+
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        SharedPreferenceSettings sessionToken = SharedPreferenceSettings.SESSION_TOKEN;
+        SharedPreferenceSettings accountInfo = SharedPreferenceSettings.ACCOUNT_INFO;
+        editor.putString(sessionToken.getId(), mClientUser.getSid());
+        editor.putString(accountInfo.getId(), userInfoStr);
+        editor.commit();
+    }
+
+    public ClientUser getClientUser() {
         if(mClientUser != null) {
             return mClientUser;
         }
-        String registerAccount = getAutoRegisterAccount();
-        if(!TextUtils.isEmpty(registerAccount)) {
-            mClientUser = new ClientUser();
-            return mClientUser.from(registerAccount);
-        }
-        return null;
+
+        SharedPreferenceSettings accountInfo = SharedPreferenceSettings.ACCOUNT_INFO;
+        String userInfoStr = mSharedPreferences.getString(accountInfo.getId(),
+                accountInfo.getDefaultValue().toString());
+
+        return from(userInfoStr);
     }
 
-    private static String getAutoRegisterAccount() {
-        SharedPreferences sharedPreferences = CallUpPreferences.getSharedPreferences();
-        SharedPreferenceSettings accountInfo = SharedPreferenceSettings.ACCOUNT_INFO;
-        String registerAccount = sharedPreferences.getString(accountInfo.getId(),
-                (String) accountInfo.getDefaultValue());
-        return registerAccount;
+    public ClientUser from(String userInfoStr) {
+        try {
+            JSONObject userInfo = new JSONObject(userInfoStr);
+            return new ClientUser(
+                    userInfo.getInt("id"), userInfo.getString("sid"),
+                    userInfo.getString("Name"), userInfo.getString("Location"),
+                    userInfo.getInt("Level"), userInfo.getString("UserState"),
+                    userInfo.getString("Face"), userInfo.getString("SmallFace")
+            );
+        } catch (JSONException e) {
+            LogUtil.e(TAG, e.getMessage());
+            return null;
+        }
     }
 }

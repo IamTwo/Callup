@@ -14,6 +14,7 @@ import java.util.List;
 
 import dlmj.callup.BusinessLogic.Cache.ImageCacheManager;
 import dlmj.callup.Common.Factory.BackColorFactory;
+import dlmj.callup.Common.Factory.FrequentFactory;
 import dlmj.callup.Common.Model.Alarm;
 import dlmj.callup.R;
 
@@ -25,12 +26,15 @@ public class AlarmAdapter extends BaseAdapter{
     private Context mContext;
     private ImageLoader mImageLoader;
     private BackColorFactory mBackColorFactory;
+    private FrequentFactory mFrequentFactory;
 
-    public AlarmAdapter(Context context, List<Alarm> alarms, BackColorFactory backColorFactory){
+    public AlarmAdapter(Context context, List<Alarm> alarms, BackColorFactory backColorFactory,
+                        FrequentFactory frequentFactory){
         this.mAlarms = alarms;
         this.mContext = context;
         this.mImageLoader = ImageCacheManager.getInstance(context).getImageLoader();
         this.mBackColorFactory = backColorFactory;
+        this.mFrequentFactory = frequentFactory;
     }
 
     @Override
@@ -64,6 +68,8 @@ public class AlarmAdapter extends BaseAdapter{
                     .findViewById(R.id.timeTextView);
             viewHolder.mSceneTextView = (TextView) convertView
                     .findViewById(R.id.sceneTextView);
+            viewHolder.mFrequentTextView = (TextView) convertView
+                    .findViewById(R.id.frequentTextView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -74,7 +80,9 @@ public class AlarmAdapter extends BaseAdapter{
                 .setImageUrl(alarm.getLogoUrl(), mImageLoader);
         viewHolder.mSceneTextView.setText(alarm.getSceneName());
         viewHolder.mTimeTextView.setText(alarm.getTime());
+        String frequent = mFrequentFactory.get(alarm.getFrequent());
         viewHolder.mSceneImageView.setBackgroundColor(mBackColorFactory.get(position));
+        viewHolder.mFrequentTextView.setText(frequent);
         return convertView;
     }
 
@@ -82,5 +90,6 @@ public class AlarmAdapter extends BaseAdapter{
         NetworkImageView mSceneImageView;
         TextView mTimeTextView;
         TextView mSceneTextView;
+        TextView mFrequentTextView;
     }
 }

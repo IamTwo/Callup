@@ -109,7 +109,9 @@ public class FriendListActivity extends Activity implements UIDataListener<Bean>
                 friendStr = friendList.getString(i);
                 JSONObject friend = new JSONObject(friendStr);
                 mFriendList.add(new Friend(
+                        friend.getInt("UserBid"),
                         friend.getString("SmallFace"),
+                        friend.getString("Account"),
                         friend.getString("Name")));
             }
             mFriendAdapter.notifyDataSetChanged();

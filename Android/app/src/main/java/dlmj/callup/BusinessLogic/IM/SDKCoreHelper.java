@@ -2,7 +2,6 @@ package dlmj.callup.BusinessLogic.IM;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.yuntongxun.ecsdk.ECDevice;
 import com.yuntongxun.ecsdk.ECError;
@@ -64,14 +63,14 @@ public class SDKCoreHelper implements ECDevice.InitListener, ECDevice.OnECDevice
     @Override
     public void onInitialized() {
         LogUtil.d(TAG, "ECSDK is ready");
-        ClientUser clientUser = UserCache.getClientUser();
+        ClientUser clientUser = UserCache.getInstance().getClientUser();
         if(mInitParams == null || mInitParams.getInitParams() == null
                 || mInitParams.getInitParams().isEmpty()) {
             mInitParams = new ECInitParams();
         }
 
         mInitParams.reset();
-        mInitParams.setUserid("123456");
+        mInitParams.setUserid(clientUser.getUserId() + "");
         mInitParams.setAppKey(APP_ID);
         mInitParams.setToken(APP_TOKEN);
         mInitParams.setMode(mMode);
@@ -84,7 +83,7 @@ public class SDKCoreHelper implements ECDevice.InitListener, ECDevice.OnECDevice
             return ;
         }
 
-        mInitParams.setOnChatReceiveListener(IMChattingHelper.getInstance());
+        mInitParams.setOnChatReceiveListener(IMChattingHelper.getInstance(mContext).getOnChatReceiverListener());
         mInitParams.setOnDeviceConnectListener(this);
         ECDevice.login(mInitParams);
     }

@@ -2,7 +2,6 @@ package dlmj.callup.Common.Util;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 
 import java.io.File;
 
@@ -19,12 +18,11 @@ public class BaseInfoUtil {
     }
 
     public static String getDownloadMusicPath(Context context) {
-        return "/";
+        return File.separator + getAppName(context) + File.separator;
     }
 
-    public static boolean ifFileExists(String Path) {
-        File file = new File(Path);
-
+    public static boolean ifFileExists(String path) {
+        File file = new File(path);
         return file.exists();
     }
 

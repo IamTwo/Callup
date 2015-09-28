@@ -1,11 +1,15 @@
 package dlmj.callup.UI.View;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 
 import org.json.JSONException;
@@ -17,16 +21,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import dlmj.callup.BroadcastReceiver.AlarmReceiver;
+import dlmj.callup.BusinessLogic.Alarm.CalendarHelper;
 import dlmj.callup.BusinessLogic.Cache.AlarmCache;
+import dlmj.callup.BusinessLogic.Network.AlarmLoadHelper;
 import dlmj.callup.BusinessLogic.Network.NetworkHelper;
+import dlmj.callup.Common.Factory.DialogFactory;
 import dlmj.callup.Common.Factory.FragmentFactory;
 import dlmj.callup.Common.Interfaces.ChangeFragmentListener;
 import dlmj.callup.Common.Interfaces.DialogListener;
+import dlmj.callup.Common.Interfaces.OnDownloadChangedListener;
 import dlmj.callup.Common.Interfaces.UIDataListener;
 import dlmj.callup.Common.Model.Alarm;
-import dlmj.callup.Common.Params.CodeParams;
 import dlmj.callup.Common.Model.AlarmTime;
 import dlmj.callup.Common.Model.Bean;
+import dlmj.callup.Common.Params.IntentExtraParams;
 import dlmj.callup.Common.Params.UrlParams;
 import dlmj.callup.Common.Util.LogUtil;
 import dlmj.callup.Common.Util.StringUtil;
@@ -44,6 +53,7 @@ public class SetAlarmTimeDialog extends Dialog {
     private Button mEverydayButton;
     private Button mWeekdaysButton;
     private Button mWeekendsButton;
+    private ProgressBar mLoadProgressBar;
     private Calendar mCalendar = Calendar.getInstance();
     private View.OnClickListener mDayChosenListener;
     private int[] mDayResult = new int[7];
@@ -55,6 +65,10 @@ public class SetAlarmTimeDialog extends Dialog {
     private String mTime;
     private ChangeFragmentListener mChangeFragmentListener;
     private NetworkHelper mAddAlarmNetworkHelper;
+    private NetworkHelper mEditAlarmNetworkHelper;
+    private int mProgressBarStatus;
+    private AlarmLoadHelper mAlarmLoadHelper;
+    private Dialog mProgressDialog;
 
     public SetAlarmTimeDialog(Context context) {
         super(context, R.style.AlertDialog);
@@ -64,13 +78,20 @@ public class SetAlarmTimeDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.set_time);
-        mAddAlarmNetworkHelper = new NetworkHelper(this.getContext());
+        initializeData();
         findView();
         setListener();
     }
 
+    private void initializeData() {
+        mAddAlarmNetworkHelper = new NetworkHelper(this.getContext());
+        mEditAlarmNetworkHelper = new NetworkHelper(this.getContext());
+        mAlarmLoadHelper = AlarmLoadHelper.getInstance(this.getContext());
+    }
+
     @Override
     protected void onStart() {
+        super.onStart();
         initializeWeekDayPackage();
         checkDayMatchRepeatPackage();
         setTimePicker();
@@ -84,6 +105,10 @@ public class SetAlarmTimeDialog extends Dialog {
         mEverydayButton = (Button) findViewById(R.id.everydayButton);
         mWeekdaysButton = (Button) findViewById(R.id.weekdaysButton);
         mWeekendsButton = (Button) findViewById(R.id.weekendsButton);
+        mLoadProgressBar = (ProgressBar) findViewById(R.id.loadProgressBar);
+        mLoadProgressBar.setMax(100);
+        mLoadProgressBar.setProgress(0);
+        mProgressDialog = DialogFactory.getProgressDialog(getContext());
     }
 
     public void setAlarmInfo(int sceneId) {
@@ -105,10 +130,38 @@ public class SetAlarmTimeDialog extends Dialog {
     }
 
     private void setListener() {
+        mAlarmLoadHelper.setOnChangeListener(new OnDownloadChangedListener() {
+            @Override
+            public void onChanged() {
+                mProgressBarStatus = mAlarmLoadHelper.getDownloadedContent() * 100 /
+                        mAlarmLoadHelper.getMaxContent();
+                LogUtil.d(TAG, "ProgressBar status is " + mProgressBarStatus);
+                mLoadProgressBar.setProgress(mProgressBarStatus);
+            }
+
+            @Override
+            public void onFinished() {
+                mDialogListener.closeDialog();
+                mChangeFragmentListener.ChangeFragment(FragmentFactory.FragmentName.SetAlarm);
+
+                Alarm alarm = mAlarmLoadHelper.getAlarm();
+                Intent intent = new Intent(getContext(), AlarmReceiver.class);
+                intent.putExtra(IntentExtraParams.ALARM, alarm);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
+                        alarm.getSceneId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                mCalendar = CalendarHelper.getInstance().getNextCalendar(alarm);
+                AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+                alarmManager.cancel(pendingIntent);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(),
+                        pendingIntent);
+            }
+        });
+
         mAddAlarmNetworkHelper.setUiDataListener(new UIDataListener<Bean>() {
             @Override
             public void onDataChanged(Bean data) {
                 try {
+                    mProgressDialog.cancel();
                     JSONObject result = new JSONObject(data.getResult());
                     String alarmInfoStr = result.getString("alarminfo");
                     JSONObject alarmInfo = new JSONObject(alarmInfoStr);
@@ -118,10 +171,11 @@ public class SetAlarmTimeDialog extends Dialog {
                             alarmInfo.getString("Picture"),
                             alarmInfo.getString("Name"),
                             alarmInfo.getString("Time"),
-                            alarmInfo.getString("frequent_type"));
-                    AlarmCache.getInstance().addAlarm(alarm);
-                    mChangeFragmentListener.ChangeFragment(FragmentFactory.FragmentName.SetAlarm);
-                    mDialogListener.closeDialog();
+                            alarmInfo.getString("frequent_type"),
+                            alarmInfo.getString("Audio"));
+                    AlarmCache.getInstance().addItem(alarm);
+
+                    mAlarmLoadHelper.loadAlarmInfo(alarm);
 
                 } catch (JSONException e) {
                     LogUtil.e(TAG, e.getMessage());
@@ -130,7 +184,25 @@ public class SetAlarmTimeDialog extends Dialog {
 
             @Override
             public void onErrorHappened(int errorCode, String errorMessage) {
+                mProgressDialog.cancel();
+            }
+        });
 
+        mEditAlarmNetworkHelper.setUiDataListener(new UIDataListener<Bean>() {
+            @Override
+            public void onDataChanged(Bean data) {
+                LogUtil.d(TAG, "Success to update the alarm info");
+                AlarmCache.getInstance().updateAlarm(mAlarmId, mTime);
+                Alarm alarm = AlarmCache.getInstance().getAlarm(mAlarmId);
+
+                mAlarmLoadHelper.loadAlarmInfo(alarm);
+
+                mProgressDialog.cancel();
+            }
+
+            @Override
+            public void onErrorHappened(int errorCode, String errorMessage) {
+                mProgressDialog.cancel();
             }
         });
 
@@ -153,7 +225,14 @@ public class SetAlarmTimeDialog extends Dialog {
                     params.put("Scene_id", mCurrentSceneId + "");
                     params.put("frequent_type", resultStr);
                     mAddAlarmNetworkHelper.sendPostRequest(UrlParams.CREATE_ALARM_URL, params);
+                } else {
+                    params.put("id", mAlarmId + "");
+                    params.put("key", "Time");
+                    params.put("val", mTime);
+                    mEditAlarmNetworkHelper.sendPostRequest(UrlParams.Edit_ALARM_URL, params);
                 }
+
+                mProgressDialog.show();
             }
         });
 
@@ -204,23 +283,6 @@ public class SetAlarmTimeDialog extends Dialog {
             }
         };
 
-        UIDataListener<Bean> createAlarmListener = new UIDataListener<Bean>() {
-            @Override
-            public void onDataChanged(Bean data) {
-                try {
-                    JSONObject result = new JSONObject(data.getResult());
-                    Log.d("result", result.toString());
-                } catch (JSONException e) {
-                    this.onErrorHappened(CodeParams.ERROR_SAVE_SESSION_TOKEN, e.toString());
-                }
-            }
-
-            @Override
-            public void onErrorHappened(int errorCode, String errorMessage) {
-
-            }
-        };
-
         mEverydayButton.setOnClickListener(repeatChosenClickListener);
         mWeekdaysButton.setOnClickListener(repeatChosenClickListener);
         mWeekendsButton.setOnClickListener(repeatChosenClickListener);
@@ -255,6 +317,9 @@ public class SetAlarmTimeDialog extends Dialog {
         Button satButton = (Button) findViewById(R.id.SatButton);
         Button sunButton = (Button) findViewById(R.id.SunButton);
 
+        mWeekendsPackage.clear();
+        mWeekDaysPackage.clear();
+        mEveryDayPackage.clear();
         mWeekendsPackage.add(satButton);
         mWeekendsPackage.add(sunButton);
         mWeekDaysPackage.add(monButton);
@@ -300,11 +365,11 @@ public class SetAlarmTimeDialog extends Dialog {
         for (Button button : mEveryDayPackage) {
             button.setBackgroundResource(R.drawable.cancel_btn);
             button.setTag(false);
-            setCurrentDay(button.getText().toString(), false);
         }
     }
 
     private void setButtonBack() {
+        clearDayBackground();
         for (int i = 0; i < mDayResult.length; i++) {
             if (mDayResult[i] == 1) {
                 mEveryDayPackage.get(i).setBackgroundResource(R.drawable.submit_btn);
@@ -313,6 +378,7 @@ public class SetAlarmTimeDialog extends Dialog {
     }
 
     private void checkDayMatchRepeatPackage() {
+        clearRepeatTypeBackground();
         String resultStr = "";
 
         for (int day : mDayResult) {
@@ -335,7 +401,7 @@ public class SetAlarmTimeDialog extends Dialog {
                 mWeekendsButton.setTag(true);
                 break;
             default:
-                clearRepeatTypeBackground();
+                break;
 
         }
     }

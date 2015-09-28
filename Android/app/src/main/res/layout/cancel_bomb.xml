@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="250dp"
+    android:layout_height="200dp"
+    android:gravity="center"
+    android:background="@drawable/calculation_back">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/calculationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"/>
+
+        <EditText
+            android:id="@+id/resultEditText"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submitButton"
+        android:background="@drawable/submit_btn_back"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        android:layout_marginTop="15dp"/>
+</LinearLayout>

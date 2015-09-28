@@ -1,11 +1,15 @@
 package dlmj.callup.UI.Fragment.FriendBomb;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -32,6 +36,7 @@ public class FriendBombFragment extends CallUpFragment {
 
     public void findView(View view) {
         mMenuButton = (Button) view.findViewById(R.id.menuButton);
+        mMenuButton.requestFocus();
         mFragmentTabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
         mFragmentTabHost.setup(getActivity(), getActivity().getSupportFragmentManager(),
                 R.id.mainContent);

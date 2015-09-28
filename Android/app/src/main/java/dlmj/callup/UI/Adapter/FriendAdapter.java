@@ -67,7 +67,8 @@ public class FriendAdapter extends BaseAdapter {
 
         Friend friend = (Friend)getItem(position);
         viewHolder.mFriendImageView
-                .setImageUrl(friend.getImageUrl(), mImageLoader);
+                .setImageUrl(friend.getFaceUrl(), mImageLoader);
+        viewHolder.mFriendImageView.setDefaultImageResId(R.drawable.default_photo);
         viewHolder.mFriendNameTextView.setText(friend.getName());
         return convertView;
     }

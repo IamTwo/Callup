@@ -1,12 +1,19 @@
 package dlmj.callup.BusinessLogic.IM;
 
-import android.app.LauncherActivity;
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import dlmj.callup.Common.Model.Friend;
+import dlmj.callup.Common.Params.IntentExtraParams;
 import dlmj.callup.Common.Util.BaseInfoUtil;
 import dlmj.callup.Common.Util.LogUtil;
+import dlmj.callup.Common.Util.NotificationUtil;
+import dlmj.callup.R;
+import dlmj.callup.UI.Activity.Account.IntroduceActivity;
+import dlmj.callup.UI.Activity.FriendBomb.HistoryActivity;
 
 /**
  * Created by Two on 15/9/8.
@@ -41,20 +48,23 @@ public class CallUpNotificationManager {
         cancel();
     }
 
-    public void showCustomNewMessageNotification(Context context, String pushContent,
-                                                 String fromUserName, String sessionId,
-                                                 int lastMessageType) {
-        LogUtil.w("showCustomNewMessageNotification pushContent： " + pushContent
-                        + ", fromUserName: " + fromUserName + " ,sessionId: "
-                        + sessionId + " ,msgType: " + lastMessageType);
-
-        Intent intent = new Intent(mContext, LauncherActivity.class);
-//        intent.putExtra("notification_type", "pushcontent_notification");
-//        intent.putExtra("Intro_Is_Muti_Talker", true);
-//        intent.putExtra("Main_FromUserName", fromUserName);
-//        intent.putExtra("Main_Session", sessionId);
-//        intent.putExtra("MainUI_User_Last_Msg_Type", lastMsgType);
+    public void showCustomNewMessageNotification(Context context, Friend friend,
+                                                 String sessionId, int lastMessageType) {
+        LogUtil.w("showCustomNewMessageNotification fromUserName: " + friend.getName()
+                + " ,sessionId: " + sessionId + " ,msgType: " + lastMessageType);
+        Intent intent = new Intent(mContext, HistoryActivity.class);
+        intent.putExtra(IntentExtraParams.FRIEND, friend);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 35, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = NotificationUtil.buildNotification(context,
+                R.drawable.ic_launcher, friend.getName(),
+                mContext.getString(R.string.send_a_bomb), pendingIntent);
+        notification.flags = (Notification.FLAG_AUTO_CANCEL | notification.flags);
+        ((NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE))
+                .notify(friend.getUserId(), notification);
     }
 }

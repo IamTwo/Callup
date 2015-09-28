@@ -15,16 +15,21 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.toolbox.ImageLoader;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import dlmj.callup.BusinessLogic.Cache.ImageCacheManager;
+import dlmj.callup.BusinessLogic.Cache.UserCache;
+import dlmj.callup.CallUpApplication;
 import dlmj.callup.Common.Factory.ErrorMessageFactory;
+import dlmj.callup.Common.Model.ClientUser;
 import dlmj.callup.Common.Params.CodeParams;
 import dlmj.callup.Common.Interfaces.UIDataListener;
-import dlmj.callup.Common.Params.SharedPreferenceParams;
 import dlmj.callup.Common.Params.SharedPreferenceSettings;
 import dlmj.callup.Common.Params.UrlParams;
 import dlmj.callup.Common.Model.Bean;
@@ -32,6 +37,7 @@ import dlmj.callup.BusinessLogic.Network.NetworkHelper;
 import dlmj.callup.Common.Util.CallUpPreferences;
 import dlmj.callup.R;
 import dlmj.callup.UI.Activity.MainActivity;
+import dlmj.callup.UI.View.CircleImageView;
 import dlmj.callup.UI.View.CustomAlertDialog;
 
 /**
@@ -49,6 +55,7 @@ public class IntroduceActivity extends Activity implements UIDataListener<Bean> 
     private Button mLoginButton;
     private String mAccount;
     private String mPassword;
+    private ImageLoader mImageLoader;
 
     @Override
     public void onCreate(Bundle savedInstancesState) {
@@ -72,6 +79,7 @@ public class IntroduceActivity extends Activity implements UIDataListener<Bean> 
     }
 
     public void initializeData() {
+        mImageLoader = ImageCacheManager.getInstance(this).getImageLoader();
         mNetworkHelper = new NetworkHelper(this);
         mErrorMessageFactory = new ErrorMessageFactory(this);
         mSharedPreferences = CallUpPreferences.getSharedPreferences();
@@ -109,8 +117,11 @@ public class IntroduceActivity extends Activity implements UIDataListener<Bean> 
                 mRegisterMenuButton.setVisibility(View.INVISIBLE);
 
                 mLoginButton = (Button) loginView.findViewById(R.id.loginButton);
+                CircleImageView photoImageView = (CircleImageView) loginView
+                        .findViewById(R.id.photoCircleImageView);
                 EditText accountEditText = (EditText) loginView.findViewById(R.id.accountEditText);
                 EditText passwordEditText = (EditText) loginView.findViewById(R.id.passwordEditText);
+                photoImageView.setDefaultImageResId(R.drawable.default_photo);
                 mLoginButton.setOnClickListener(mOnLoginClickListener);
                 accountEditText.addTextChangedListener(accountTextWatcher);
                 passwordEditText.addTextChangedListener(passwordTextWatcher);
@@ -216,12 +227,8 @@ public class IntroduceActivity extends Activity implements UIDataListener<Bean> 
         try {
             JSONObject result = new JSONObject(data.getResult());
             String userInfoStr = result.getString("Customer");
-            JSONObject userInfo = new JSONObject(userInfoStr);
-            String sessionTokenValue = userInfo.getString("sid");
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            SharedPreferenceSettings sessionToken = SharedPreferenceSettings.SESSION_TOKEN;
-            editor.putString(sessionToken.getId(), sessionTokenValue);
-            editor.commit();
+            UserCache.getInstance().setClientUser(userInfoStr);
+            CallUpApplication.getInstance().Initialize();
             GoToMainActivity();
         } catch (JSONException e) {
             this.onErrorHappened(CodeParams.ERROR_SAVE_SESSION_TOKEN, e.toString());

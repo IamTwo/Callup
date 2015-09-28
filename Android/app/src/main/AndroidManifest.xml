@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
     <application
         android:name=".CallUpApplication"
@@ -58,10 +59,23 @@
         </activity>
 
         <activity android:name=".UI.Activity.SelfSave.AlarmActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance">
         </activity>
 
         <activity android:name=".UI.Activity.FriendBomb.FriendListActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".UI.Activity.FriendBomb.HistoryActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".UI.Activity.Account.ProfileActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".UI.Activity.FriendBomb.BombActivity"
             android:screenOrientation="portrait">
         </activity>
 
@@ -75,6 +89,13 @@
 
         <receiver android:name=".BroadcastReceiver.AlarmReceiver">
             <intent-filter> 
+                <action android:name="android.intent.action.MY_BROADCAST"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".BroadcastReceiver.BombReceiver">
+            <intent-filter>
                 <action android:name="android.intent.action.MY_BROADCAST"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

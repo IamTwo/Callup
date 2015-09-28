@@ -23,7 +23,9 @@ public class AlarmTableManager {
                 "logo_url VARCHAR," +
                 "image_url VARCHAR" +
                 "scene_name VARCHAR" +
-                "time VARCHAR) IF NOT EXISTS");
+                "time VARCHAR" +
+                "frequent_type VARCHAR" +
+                "audio_url VARCHAR) IF NOT EXISTS");
     }
 
     public void saveAlarms(List<Alarm> alarms) {
@@ -37,6 +39,7 @@ public class AlarmTableManager {
             contentValues.put("scene_name", alarm.getSceneName());
             contentValues.put("time", alarm.getTime());
             contentValues.put("frequent_type", alarm.getFrequent());
+            contentValues.put("audio_url", alarm.getAudioUrl());
         }
 
         mSQLiteDatabase.setTransactionSuccessful();
@@ -53,7 +56,8 @@ public class AlarmTableManager {
                     cursor.getString(cursor.getColumnIndex("image_url")),
                     cursor.getString(cursor.getColumnIndex("scene_name")),
                     cursor.getString(cursor.getColumnIndex("time")),
-                    cursor.getString(cursor.getColumnIndex("frequent_type"))));
+                    cursor.getString(cursor.getColumnIndex("frequent_type")),
+                    cursor.getString(cursor.getColumnIndex("audio_url"))));
         }
         cursor.close();
         return alarms;

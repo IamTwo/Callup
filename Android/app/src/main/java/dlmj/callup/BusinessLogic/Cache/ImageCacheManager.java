@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 
 import com.android.volley.toolbox.ImageLoader;
 
+
 import dlmj.callup.BusinessLogic.Network.VolleyQueueController;
 
 /**
@@ -15,6 +16,7 @@ public class ImageCacheManager implements ImageLoader.ImageCache{
     private ImageLoader mImageLoader;
     private static ImageCacheManager mInstance;
     private BitmapCache mBitmapCache;
+    private static final String DISK_CACHE_DIR = "CallUp";
 
     private ImageCacheManager(Context context){
         int maxSize = ((ActivityManager) context

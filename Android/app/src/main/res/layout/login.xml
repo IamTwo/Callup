@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,9 +8,9 @@
     android:gravity="center_horizontal">
 
     <dlmj.callup.UI.View.CircleImageView
+        android:id="@+id/photoCircleImageView"
         android:layout_width="107dp"
-        android:layout_height="107dp"
-        view:src="@drawable/default_photo"/>
+        android:layout_height="107dp"/>
 
     <LinearLayout
         style="@style/AccountLayout">
