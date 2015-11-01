@@ -1,6 +1,10 @@
 package dlmj.callup.Common.Model;
 
+import android.content.Context;
+
 import java.io.Serializable;
+
+import dlmj.callup.Common.Util.StringUtil;
 
 /**
  * Created by Two on 15/8/10.
@@ -28,8 +32,8 @@ public class Scene implements Serializable {
         return mSceneId;
     }
 
-    public String getName() {
-        return mName;
+    public String getName(Context context) {
+        return StringUtil.getStringFromResource(context, mName);
     }
 
     public String getLogoUrl() {

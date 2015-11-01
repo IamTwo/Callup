@@ -72,4 +72,5 @@
     <string name="send_a_bomb">Send you a bomb</string>
     <string name="error_result">The calculation result is wrong!</string>
     <string name="win_pk">%s wined the pk</string>
+    <string name="callup_id">CallUp ID</string>
 </resources>

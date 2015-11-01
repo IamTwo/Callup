@@ -7,9 +7,13 @@ import android.content.Intent;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
+import dlmj.callup.BroadcastReceiver.AlarmReceiver;
 import dlmj.callup.BroadcastReceiver.BombReceiver;
+import dlmj.callup.BusinessLogic.Cache.AlarmCache;
+import dlmj.callup.Common.Model.Alarm;
 import dlmj.callup.Common.Model.Friend;
 import dlmj.callup.Common.Model.History;
 import dlmj.callup.Common.Params.IntentExtraParams;
@@ -37,5 +41,37 @@ public class AlarmSetManager {
         } catch (ParseException e) {
             LogUtil.e(TAG, e.getMessage());
         }
+    }
+
+    public static void setAlarm(Context context, Alarm alarm) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra(IntentExtraParams.ALARM, alarm);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                alarm.getAlarmId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Calendar calendar = CalendarHelper.getInstance().getNextCalendar(alarm);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                pendingIntent);
+    }
+
+    public static void clear(Context context) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        for(Alarm alarm : AlarmCache.getInstance(context).getList()) {
+            intent.putExtra(IntentExtraParams.ALARM, alarm);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                    alarm.getSceneId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+        }
+    }
+
+    public static void removeAlarm(Context context, Alarm alarm) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra(IntentExtraParams.ALARM, alarm);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                alarm.getSceneId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 }

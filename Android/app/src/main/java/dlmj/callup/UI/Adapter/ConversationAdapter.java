@@ -70,7 +70,8 @@ public class ConversationAdapter extends BaseAdapter{
         }
 
         Conversation conversation = (Conversation)getItem(position);
-        Friend friend = FriendCache.getInstance().getFriend(conversation.getFriendUserId());
+        Friend friend = FriendCache.getInstance(mContext)
+                .getFriend(conversation.getFriendUserId());
         viewHolder.mFriendPhotoImageView.setImageUrl(friend.getFaceUrl(), mImageLoader);
         viewHolder.mFriendNameTextView.setText(friend.getName());
         viewHolder.mLastMessageTextView.setText(conversation.getLastMessage());

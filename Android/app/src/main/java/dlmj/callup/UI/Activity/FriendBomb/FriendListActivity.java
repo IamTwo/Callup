@@ -26,12 +26,13 @@ import dlmj.callup.Common.Model.Bean;
 import dlmj.callup.Common.Model.Friend;
 import dlmj.callup.Common.Params.UrlParams;
 import dlmj.callup.R;
+import dlmj.callup.UI.Activity.CallUpActivity;
 import dlmj.callup.UI.Adapter.FriendAdapter;
 
 /**
  * Created by Two on 15/9/8.
  */
-public class FriendListActivity extends Activity implements UIDataListener<Bean> {
+public class FriendListActivity extends CallUpActivity implements UIDataListener<Bean> {
     private ListView mFriendListView;
     private NetworkHelper mNetworkHelper;
     Map<String, String> mParams = new HashMap<>();

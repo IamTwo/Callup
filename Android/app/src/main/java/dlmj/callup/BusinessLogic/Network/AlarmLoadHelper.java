@@ -164,4 +164,8 @@ public class AlarmLoadHelper {
             LogUtil.d(TAG, "Download file is updated.");
         }
     }
+
+    public void cancelDownloadTask() {
+        mDownloadManager.remove(mDownloadId);
+    }
 }

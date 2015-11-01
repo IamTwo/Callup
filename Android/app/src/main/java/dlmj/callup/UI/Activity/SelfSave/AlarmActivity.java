@@ -25,12 +25,13 @@ import dlmj.callup.Common.Model.History;
 import dlmj.callup.Common.Model.Scene;
 import dlmj.callup.Common.Params.IntentExtraParams;
 import dlmj.callup.R;
+import dlmj.callup.UI.Activity.CallUpActivity;
 import dlmj.callup.UI.View.CancelBombDialog;
 
 /**
  * Created by Two on 15/8/27.
  */
-public class AlarmActivity extends Activity {
+public class AlarmActivity extends CallUpActivity {
     public final static int FINISHED = 1;
     private final static String TAG = "AlarmActivity";
     private ImageView mSwingTimeImageView;
@@ -105,13 +106,14 @@ public class AlarmActivity extends Activity {
             public void closeCancelBombDialog() {
                 mAlarmHelper.stopAudio();
                 mCancelBombDialog.dismiss();
-                Scene scene = SceneCache.getInstance().getScene(mAlarm.getSceneId());
+                Scene scene = SceneCache.getInstance(AlarmActivity.this)
+                        .getScene(mAlarm.getSceneId());
                 ClientUser clientUser = UserCache.getInstance().getClientUser();
                 History history = new History(scene,
                         mAlarm.getTime(), History.failed,
                         clientUser.getUserId(),
                         clientUser.getUserName());
-                HistoryCache.getInstance().updateHistory(history, mFriend);
+                HistoryCache.getInstance(AlarmActivity.this).updateHistory(history, mFriend);
                 IMChattingHelper.getInstance(AlarmActivity.this).sendMessage(mFriend, history);
             }
         };

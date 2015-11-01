@@ -75,9 +75,19 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".UI.Activity.FriendBomb.BombActivity"
+        <activity android:name=".UI.Activity.Account.AccountActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity android:name=".UI.Activity.Account.AboutActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <service android:name=".Service.AlarmTableService">
+        </service>
+
+        <service android:name=".Service.HistoryTableService">
+        </service>
 
         <service android:name=".Service.AlarmService">
         </service>
@@ -98,6 +108,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MY_BROADCAST"/>
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".BroadcastReceiver.RebootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.reboot"/>
             </intent-filter>
         </receiver>
 

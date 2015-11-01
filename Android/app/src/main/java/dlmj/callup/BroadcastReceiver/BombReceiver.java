@@ -23,7 +23,7 @@ public class BombReceiver extends BroadcastReceiver {
         Intent newIntent = new Intent(context, AlarmActivity.class);
         newIntent.putExtra(IntentExtraParams.ALARM, new Alarm(0,
                 scene.getSceneId(), scene.getLogoUrl(), scene.getImageUrl(),
-                scene.getName(), time, "0000000", scene.getAudioUrl()));
+                scene.getName(context), time, "0000000", scene.getAudioUrl()));
         newIntent.putExtra(IntentExtraParams.FRIEND, friend);
         newIntent.putExtra(IntentExtraParams.FROM, "BombReceiver");
         newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

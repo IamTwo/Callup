@@ -14,4 +14,5 @@ public class IntentExtraParams {
     public static final String SCENE = "Scene";
     public static final String TIME = "Time";
     public static final String FROM = "From";
+    public static final String ALARM_ID = "AlarmId";
 }

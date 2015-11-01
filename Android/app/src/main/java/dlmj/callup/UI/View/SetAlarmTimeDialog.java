@@ -1,10 +1,7 @@
 package dlmj.callup.UI.View;
 
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,8 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import dlmj.callup.BroadcastReceiver.AlarmReceiver;
-import dlmj.callup.BusinessLogic.Alarm.CalendarHelper;
+import dlmj.callup.BusinessLogic.Alarm.AlarmSetManager;
 import dlmj.callup.BusinessLogic.Cache.AlarmCache;
 import dlmj.callup.BusinessLogic.Network.AlarmLoadHelper;
 import dlmj.callup.BusinessLogic.Network.NetworkHelper;
@@ -35,7 +31,6 @@ import dlmj.callup.Common.Interfaces.UIDataListener;
 import dlmj.callup.Common.Model.Alarm;
 import dlmj.callup.Common.Model.AlarmTime;
 import dlmj.callup.Common.Model.Bean;
-import dlmj.callup.Common.Params.IntentExtraParams;
 import dlmj.callup.Common.Params.UrlParams;
 import dlmj.callup.Common.Util.LogUtil;
 import dlmj.callup.Common.Util.StringUtil;
@@ -145,15 +140,7 @@ public class SetAlarmTimeDialog extends Dialog {
                 mChangeFragmentListener.ChangeFragment(FragmentFactory.FragmentName.SetAlarm);
 
                 Alarm alarm = mAlarmLoadHelper.getAlarm();
-                Intent intent = new Intent(getContext(), AlarmReceiver.class);
-                intent.putExtra(IntentExtraParams.ALARM, alarm);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
-                        alarm.getSceneId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                mCalendar = CalendarHelper.getInstance().getNextCalendar(alarm);
-                AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-                alarmManager.cancel(pendingIntent);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(),
-                        pendingIntent);
+                AlarmSetManager.setAlarm(getContext(), alarm);
             }
         });
 
@@ -173,7 +160,7 @@ public class SetAlarmTimeDialog extends Dialog {
                             alarmInfo.getString("Time"),
                             alarmInfo.getString("frequent_type"),
                             alarmInfo.getString("Audio"));
-                    AlarmCache.getInstance().addItem(alarm);
+                    AlarmCache.getInstance(getContext()).addItem(alarm);
 
                     mAlarmLoadHelper.loadAlarmInfo(alarm);
 
@@ -192,8 +179,8 @@ public class SetAlarmTimeDialog extends Dialog {
             @Override
             public void onDataChanged(Bean data) {
                 LogUtil.d(TAG, "Success to update the alarm info");
-                AlarmCache.getInstance().updateAlarm(mAlarmId, mTime);
-                Alarm alarm = AlarmCache.getInstance().getAlarm(mAlarmId);
+                AlarmCache.getInstance(getContext()).updateAlarm(mAlarmId, mTime);
+                Alarm alarm = AlarmCache.getInstance(getContext()).getAlarm(mAlarmId);
 
                 mAlarmLoadHelper.loadAlarmInfo(alarm);
 

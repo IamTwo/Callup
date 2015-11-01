@@ -33,21 +33,21 @@
         jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/Android/Volley/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="b7c70cb5888fc048b4b25ded7e6bed1a189597bb">
+        sha1="3c0e4e8cfa4ceabf4f5c471fe7c68686bd030e9e">
         <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-b2f3e92116afc42fcf01ec6902a8f90afa548d9c.jar" />
     </item>
     <item
         jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/Android/PullToRefresh/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="116f60b8bea651b1701435b402ec88e6cd33634e">
+        sha1="4b7faeee99d0b12f89fc9746b07dbee99b5a8485">
         <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-f3083b7e652541aaf14df80623d2ccbe45f2b526.jar" />
     </item>
     <item
         jar="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/exploded-aar/Android/Slidingmenu/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="a01e376a7862a46569dddb965672da8c22641bd3">
+        sha1="8bc459a752da090ae8be3af84e5b7fec5d9e6843">
         <dex dex="/Users/apple/Documents/Project/Callup/Android/app/build/intermediates/pre-dexed/debug/classes-6487c3955d07539f3ba422a258a47e46443d0ba9.jar" />
     </item>
     <item

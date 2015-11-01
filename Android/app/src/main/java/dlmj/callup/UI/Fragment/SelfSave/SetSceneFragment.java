@@ -1,6 +1,7 @@
 package dlmj.callup.UI.Fragment.SelfSave;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import dlmj.callup.BusinessLogic.Cache.SceneCache;
+import dlmj.callup.BusinessLogic.Network.AlarmLoadHelper;
 import dlmj.callup.Common.Factory.BackColorFactory;
 import dlmj.callup.Common.Interfaces.ChangeFragmentListener;
 import dlmj.callup.Common.Interfaces.DialogListener;
@@ -31,6 +33,7 @@ import dlmj.callup.Common.Params.UrlParams;
 import dlmj.callup.Common.Model.Bean;
 import dlmj.callup.Common.Model.Scene;
 import dlmj.callup.BusinessLogic.Network.NetworkHelper;
+import dlmj.callup.Common.Util.StringUtil;
 import dlmj.callup.R;
 import dlmj.callup.UI.Activity.MenuActivity;
 import dlmj.callup.UI.Adapter.SceneAdapter;
@@ -50,6 +53,7 @@ public class SetSceneFragment extends CallUpFragment {
     private UIDataListener<Bean> mGetScenesListener;
     private DialogListener mDialogListener;
     private SetAlarmTimeDialog mSetTimeDialog;
+    private DialogInterface.OnCancelListener mOnCancelListener;
 
     @Override
     public void onAttach(Activity activity) {
@@ -72,7 +76,7 @@ public class SetSceneFragment extends CallUpFragment {
 
     public void initializeData() {
         mGetScenesNetworkHelper = new NetworkHelper(this.getActivity());
-        SceneCache sceneCache = SceneCache.getInstance();
+        SceneCache sceneCache = SceneCache.getInstance(getActivity());
         if (sceneCache.getList().size() > 0) {
             mSceneList = sceneCache.getList();
         } else {
@@ -90,6 +94,13 @@ public class SetSceneFragment extends CallUpFragment {
 
     public void setListener() {
         super.setListener();
+        mOnCancelListener = new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                AlarmLoadHelper.getInstance(getActivity()).cancelDownloadTask();
+            }
+        };
+
         mGetScenesListener = new UIDataListener<Bean>() {
             @Override
             public void onDataChanged(Bean data) {
@@ -110,7 +121,7 @@ public class SetSceneFragment extends CallUpFragment {
                                 scene.getString("Audio")));
                     }
                     mSceneAdapter.notifyDataSetChanged();
-                    SceneCache.getInstance().setList(mSceneList);
+                    SceneCache.getInstance(getActivity()).setList(mSceneList);
                     mSceneGridView.onRefreshComplete();
                 } catch (JSONException e) {
                     this.onErrorHappened(CodeParams.ERROR_SAVE_SESSION_TOKEN, e.toString());
@@ -135,6 +146,7 @@ public class SetSceneFragment extends CallUpFragment {
         mDialogListener = new DialogListener() {
             @Override
             public void closeDialog() {
+                AlarmLoadHelper.getInstance(getActivity()).cancelDownloadTask();
                 mSetTimeDialog.dismiss();
             }
         };
@@ -144,6 +156,7 @@ public class SetSceneFragment extends CallUpFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Scene scene = mSceneList.get(position);
                 mSetTimeDialog = new SetAlarmTimeDialog(getActivity());
+                mSetTimeDialog.setOnCancelListener(mOnCancelListener);
                 mSetTimeDialog.setAlarmInfo(scene.getSceneId());
                 mSetTimeDialog.setDialogListener(mDialogListener);
                 mSetTimeDialog.setChangeFragmentListener(mChangeFragmentListener);
@@ -153,8 +166,8 @@ public class SetSceneFragment extends CallUpFragment {
     }
 
     private void initializeSceneList() {
-        mSceneList.clear();
-        mSceneList.add(new Scene(getString(R.string.random)));
+        SceneCache.getInstance(getActivity()).clear();
+//        mSceneList.add(new Scene(getString(R.string.random)));
     }
 
 }

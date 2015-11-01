@@ -27,7 +27,6 @@ import dlmj.callup.BusinessLogic.Cache.ImageCacheManager;
 import dlmj.callup.BusinessLogic.Cache.UserCache;
 import dlmj.callup.CallUpApplication;
 import dlmj.callup.Common.Factory.ErrorMessageFactory;
-import dlmj.callup.Common.Model.ClientUser;
 import dlmj.callup.Common.Params.CodeParams;
 import dlmj.callup.Common.Interfaces.UIDataListener;
 import dlmj.callup.Common.Params.SharedPreferenceSettings;
@@ -228,7 +227,7 @@ public class IntroduceActivity extends Activity implements UIDataListener<Bean> 
             JSONObject result = new JSONObject(data.getResult());
             String userInfoStr = result.getString("Customer");
             UserCache.getInstance().setClientUser(userInfoStr);
-            CallUpApplication.getInstance().Initialize();
+            CallUpApplication.getInstance().initialize();
             GoToMainActivity();
         } catch (JSONException e) {
             this.onErrorHappened(CodeParams.ERROR_SAVE_SESSION_TOKEN, e.toString());

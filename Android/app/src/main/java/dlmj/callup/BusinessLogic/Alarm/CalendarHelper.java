@@ -25,6 +25,7 @@ public class CalendarHelper {
         AlarmTime alarmTime = new AlarmTime(time);
         calendar.set(Calendar.HOUR_OF_DAY, alarmTime.getHour());
         calendar.set(Calendar.MINUTE, alarmTime.getMinute());
+        calendar.set(Calendar.SECOND, 0);
 
         if(alarm.isRepeat()) {
             updateDate(calendar, frequent);
@@ -42,12 +43,14 @@ public class CalendarHelper {
             }
 
             if(Integer.parseInt(frequent.charAt(i) + "") > 0) {
-                return;
+                if(calendar.compareTo(Calendar.getInstance()) > 0) {
+                    return;
+                }
+
             }
 
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
-
     }
 
     private int getCurrentWeekDay(Calendar calendar) {

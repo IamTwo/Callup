@@ -1,6 +1,5 @@
 package dlmj.callup.UI.Activity.FriendBomb;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,10 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import dlmj.callup.BusinessLogic.Alarm.AlarmHelper;
-import dlmj.callup.BusinessLogic.Alarm.AlarmSetManager;
 import dlmj.callup.BusinessLogic.Cache.ConversationCache;
-import dlmj.callup.BusinessLogic.Cache.FriendCache;
 import dlmj.callup.BusinessLogic.Cache.HistoryCache;
 import dlmj.callup.BusinessLogic.Cache.SceneCache;
 import dlmj.callup.BusinessLogic.Cache.UserCache;
@@ -47,6 +43,7 @@ import dlmj.callup.Common.Params.IntentExtraParams;
 import dlmj.callup.Common.Params.UrlParams;
 import dlmj.callup.Common.Util.LogUtil;
 import dlmj.callup.R;
+import dlmj.callup.UI.Activity.CallUpActivity;
 import dlmj.callup.UI.Activity.MenuActivity;
 import dlmj.callup.UI.Adapter.HistoryAdapter;
 import dlmj.callup.UI.Adapter.SceneHorizonAdapter;
@@ -56,7 +53,7 @@ import dlmj.callup.UI.View.SetBombTimeDialog;
 /**
  * Created by Two on 15/9/19.
  */
-public class HistoryActivity extends Activity{
+public class HistoryActivity extends CallUpActivity{
     private final static String TAG = "HistoryActivity";
     private Friend mCurrentFriend;
     private TextView mNameTextView;
@@ -74,7 +71,7 @@ public class HistoryActivity extends Activity{
     private TextView mBackTextView;
 
     @Override
-    protected void onCreate(Bundle savedInstancesState) {
+    public void onCreate(Bundle savedInstancesState) {
         super.onCreate(savedInstancesState);
         setContentView(R.layout.history);
         initializeData();
@@ -92,8 +89,8 @@ public class HistoryActivity extends Activity{
     public void initializeData() {
         mGetScenesNetworkHelper = new NetworkHelper(this);
         mCurrentFriend = (Friend)getIntent().getSerializableExtra(IntentExtraParams.FRIEND);
-        mHistoryList = HistoryCache.getInstance().getHistoryList(mCurrentFriend);
-        SceneCache sceneCache = SceneCache.getInstance();
+        mHistoryList = HistoryCache.getInstance(this).getHistoryList(mCurrentFriend);
+        SceneCache sceneCache = SceneCache.getInstance(this);
         if (sceneCache.getList().size() > 0) {
             mSceneList = sceneCache.getList();
         } else {
@@ -149,7 +146,8 @@ public class HistoryActivity extends Activity{
             public void addHistory(int sceneId, String time) {
                 LogUtil.d(TAG, "Time is: " + time);
                 ClientUser clientUser = UserCache.getInstance().getClientUser();
-                History history = new History(SceneCache.getInstance().getScene(sceneId),
+                History history = new History(SceneCache.getInstance
+                        (HistoryActivity.this).getScene(sceneId),
                         time, 0,
                         clientUser.getUserId(),
                         clientUser.getUserName());
@@ -196,7 +194,7 @@ public class HistoryActivity extends Activity{
                                 scene.getString("Audio")));
                     }
                     mSceneHorizonAdapter.notifyDataSetChanged();
-                    SceneCache.getInstance().setList(mSceneList);
+                    SceneCache.getInstance(HistoryActivity.this).setList(mSceneList);
                 } catch (JSONException e) {
                     this.onErrorHappened(CodeParams.ERROR_SAVE_SESSION_TOKEN, e.toString());
                 }
@@ -219,7 +217,7 @@ public class HistoryActivity extends Activity{
     }
 
     private void initializeSceneList() {
-        mSceneList.clear();
-        mSceneList.add(new Scene(getString(R.string.random)));
+        SceneCache.getInstance(this).clear();
+//        mSceneList.add(new Scene(getString(R.string.random)));
     }
 }

@@ -55,7 +55,7 @@ public class FriendFragment extends Fragment {
 
     private void initializeData() {
         mGetFriendNetworkHelper = new NetworkHelper(getActivity());
-        FriendCache friendCache = FriendCache.getInstance();
+        FriendCache friendCache = FriendCache.getInstance(getActivity());
         if (friendCache.getList().size() > 0) {
             mFriendList = friendCache.getList();
         } else {
@@ -77,7 +77,7 @@ public class FriendFragment extends Fragment {
                     JSONObject result = new JSONObject(data.getResult());
                     String friendListStr = result.getString("relation.list");
                     JSONArray sceneList = new JSONArray(friendListStr);
-                    mFriendList.clear();
+                    FriendCache.getInstance(getActivity()).clear();
                     String friendStr;
                     for (int i = 0; i < sceneList.length(); i++) {
                         friendStr = sceneList.getString(i);
@@ -90,9 +90,9 @@ public class FriendFragment extends Fragment {
                     }
 
                     mFriendAdapter.notifyDataSetChanged();
-                    FriendCache.getInstance().setList(mFriendList);
-                    HistoryCache.getInstance().removeHistory();
-                    HistoryCache.getInstance().setHistoryList(mFriendList);
+                    FriendCache.getInstance(getActivity()).setList(mFriendList);
+                    HistoryCache.getInstance(getActivity()).removeHistory();
+                    HistoryCache.getInstance(getActivity()).setHistoryList(mFriendList);
                     mFriendListView.onRefreshComplete();
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -1,11 +1,7 @@
 package dlmj.callup.UI.Fragment.SelfSave;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -29,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import dlmj.callup.BusinessLogic.Alarm.AlarmSetManager;
 import dlmj.callup.BusinessLogic.Cache.AlarmCache;
 import dlmj.callup.Common.Factory.BackColorFactory;
 import dlmj.callup.Common.Factory.FragmentFactory;
@@ -41,6 +38,7 @@ import dlmj.callup.Common.Model.Alarm;
 import dlmj.callup.Common.Model.Bean;
 import dlmj.callup.BusinessLogic.Network.NetworkHelper;
 import dlmj.callup.Common.Util.LogUtil;
+import dlmj.callup.DataAccess.AlarmTableManager;
 import dlmj.callup.R;
 import dlmj.callup.UI.Activity.MenuActivity;
 import dlmj.callup.UI.Adapter.AlarmAdapter;
@@ -107,7 +105,9 @@ public class SetAlarmFragment extends CallUpFragment{
         switch(item.getItemId()) {
             case 1:
                 Map<String, String> params = new HashMap<>();
-                params.put("id", mAlarmList.get(selectedPosition).getAlarmId() + "");
+                Alarm alarm = mAlarmList.get(selectedPosition);
+                params.put("id", alarm.getAlarmId()+ "");
+                AlarmSetManager.removeAlarm(getActivity(), alarm);
                 mDeleteAlarmNetworkHelper.sendPostRequest(UrlParams.DELETE_ALARM_URL, params);
                 mAlarmList.remove(selectedPosition);
                 mAlarmAdapter.notifyDataSetChanged();
@@ -141,13 +141,6 @@ public class SetAlarmFragment extends CallUpFragment{
                 mSetAlarmTimeDialog.dismiss();
             }
         };
-//        mSetAlarmTimeDialog.setChangeFragmentListener(new ChangeFragmentListener() {
-//            @Override
-//            public void ChangeFragment(FragmentFactory.FragmentName fragmentName) {
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.content_frame, ).commit();
-//            }
-//        });
 
         mGetAlarmsNetworkHelper.setUiDataListener(new UIDataListener<Bean>() {
 
@@ -157,12 +150,13 @@ public class SetAlarmFragment extends CallUpFragment{
                     JSONObject result = new JSONObject(data.getResult());
                     String alarmListStr = result.getString("alarm.list");
                     JSONArray alarmList = new JSONArray(alarmListStr);
-                    mAlarmList.clear();
+                    AlarmCache.getInstance(getActivity()).clear();
                     String alarmStr;
+                    AlarmSetManager.clear(getActivity());
                     for (int i = 0; i < alarmList.length(); i++) {
                         alarmStr = alarmList.getString(i);
                         JSONObject alarm = new JSONObject(alarmStr);
-                        mAlarmList.add(new Alarm(
+                        Alarm updatedAlarm = new Alarm(
                                 alarm.getInt("id"),
                                 alarm.getInt("Scene_id"),
                                 alarm.getString("Logo"),
@@ -170,10 +164,12 @@ public class SetAlarmFragment extends CallUpFragment{
                                 alarm.getString("Name"),
                                 alarm.getString("Time"),
                                 alarm.getString("frequent_type"),
-                                alarm.getString("Audio")));
+                                alarm.getString("Audio"));
+                        mAlarmList.add(updatedAlarm);
+                        AlarmSetManager.setAlarm(getActivity(), updatedAlarm);
                     }
                     mAlarmAdapter.notifyDataSetChanged();
-                    AlarmCache.getInstance().setList(mAlarmList);
+                    AlarmCache.getInstance(getActivity()).setList(mAlarmList);
                     Log.d("result", result.toString());
                     mPullToRefreshListView.onRefreshComplete();
                 }catch(JSONException ex) {
@@ -230,13 +226,14 @@ public class SetAlarmFragment extends CallUpFragment{
 
         mBackColorFactory = new BackColorFactory(getActivity());
         mFrequentFactory = new FrequentFactory(getActivity());
-        AlarmCache alarmCache = AlarmCache.getInstance();
+        AlarmCache alarmCache = AlarmCache.getInstance(getActivity());
+        AlarmTableManager alarmTableManager = AlarmTableManager.getInstance(getActivity());
         if (alarmCache.getList().size() > 0) {
             mAlarmList = alarmCache.getList();
-        } else {
+        }
+        else {
             Map<String, String> params = new HashMap<>();
             mGetAlarmsNetworkHelper.sendGetRequest(UrlParams.GET_ALARMS_URL, params);
         }
     }
-
 }

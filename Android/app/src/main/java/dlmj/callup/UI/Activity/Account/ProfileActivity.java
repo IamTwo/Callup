@@ -1,6 +1,5 @@
 package dlmj.callup.UI.Activity.Account;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,13 +13,14 @@ import dlmj.callup.BusinessLogic.Cache.ImageCacheManager;
 import dlmj.callup.Common.Model.Friend;
 import dlmj.callup.Common.Params.IntentExtraParams;
 import dlmj.callup.R;
+import dlmj.callup.UI.Activity.CallUpActivity;
 import dlmj.callup.UI.Activity.FriendBomb.HistoryActivity;
 import dlmj.callup.UI.View.CircleImageView;
 
 /**
  * Created by Two on 15/9/21.
  */
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends CallUpActivity {
     private Friend mCurrentFriend;
     private CircleImageView mPhotoImageView;
     private TextView mNameTextView;

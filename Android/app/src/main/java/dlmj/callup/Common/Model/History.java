@@ -1,5 +1,7 @@
 package dlmj.callup.Common.Model;
 
+import android.content.Context;
+
 import java.util.Calendar;
 
 import dlmj.callup.BusinessLogic.Cache.FriendCache;
@@ -28,17 +30,18 @@ public class History {
         mFromUserName = fromUserName;
     }
 
-    public History(String message, int fromUserId) {
+    public History(String message, int fromUserId, Context context) {
         ClientUser clientUser = UserCache.getInstance().getClientUser();
         int sceneId = Integer.parseInt(message.split("/")[0]);
-        mScene = SceneCache.getInstance().getScene(sceneId);
+        mScene = SceneCache.getInstance(context).getScene(sceneId);
         mTime = message.split("/")[1];
         mStatus = Integer.parseInt(message.split("/")[2]);
         switch(mStatus) {
             case History.waiting:
             case History.failed:
                 mFromUserId = fromUserId;
-                mFromUserName = FriendCache.getInstance().getFriend(mFromUserId).getName();
+                mFromUserName = FriendCache.getInstance(context)
+                        .getFriend(mFromUserId).getName();
                 break;
             case History.accepted:
                 mFromUserId = clientUser.getUserId();

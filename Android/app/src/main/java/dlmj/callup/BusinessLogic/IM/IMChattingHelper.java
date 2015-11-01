@@ -134,10 +134,10 @@ public class IMChattingHelper {
 
     private synchronized void postReceiveMessage(ECMessage ecMessage, boolean showNotice) {
         int userId = Integer.parseInt(ecMessage.getSessionId());
-        Friend friend = FriendCache.getInstance().getFriend(userId);
+        Friend friend = FriendCache.getInstance(mContext).getFriend(userId);
         String message = ((ECTextMessageBody)ecMessage.getBody()).getMessage();
-        History history = new History(message, userId);
-        HistoryCache.getInstance().updateHistory(history, friend);
+        History history = new History(message, userId, mContext);
+        HistoryCache.getInstance(mContext).updateHistory(history, friend);
         ConversationCache.getInstance().updateConversation(new Conversation(
                 userId,
                 String.format(mContext.getString(R.string.send_bomb_message), history.getTime())));
@@ -158,11 +158,11 @@ public class IMChattingHelper {
             showNotification(ecMessage);
     }
 
-    private static void showNotification(ECMessage ecMessage) {
+    private void showNotification(ECMessage ecMessage) {
         CallUpNotificationManager.getInstance().forceCancelNotification();
 
         int userId = Integer.parseInt(ecMessage.getForm());
-        Friend friend = FriendCache.getInstance().getFriend(userId);
+        Friend friend = FriendCache.getInstance(mContext).getFriend(userId);
         if (friend == null) {
             return;
         }

@@ -80,7 +80,7 @@ public class SceneAdapter extends BaseAdapter {
         viewHolder.mSceneImageView.setDefaultImageResId(R.drawable.question);
         viewHolder.mSceneImageView
                 .setImageUrl(scene.getLogoUrl(), mImageLoader);
-        viewHolder.mSceneTextView.setText(scene.getName());
+        viewHolder.mSceneTextView.setText(scene.getName(mContext));
         viewHolder.mSceneLayout.setBackgroundColor(mBackColorFactory.get(position));
     }
 

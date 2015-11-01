@@ -27,13 +27,14 @@ import dlmj.callup.Common.Params.SharedPreferenceSettings;
 import dlmj.callup.Common.Params.UrlParams;
 import dlmj.callup.Common.Util.CallUpPreferences;
 import dlmj.callup.R;
+import dlmj.callup.UI.Activity.CallUpActivity;
 import dlmj.callup.UI.Activity.MenuActivity;
 import dlmj.callup.UI.Adapter.LevelAdapter;
 
 /**
  * Created by Two on 15/8/6.
  */
-public class SetLevelActivity extends Activity {
+public class SetLevelActivity extends CallUpActivity {
     private ViewPager mLevelViewPager;
     private View.OnClickListener mOnSelectClickListener;
     private View.OnClickListener mOnSubmitClickListener;

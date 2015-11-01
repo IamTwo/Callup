@@ -73,7 +73,7 @@ public class SceneHorizonAdapter extends BaseAdapter {
         viewHolder.mSceneImageView
                 .setImageUrl(scene.getLogoUrl(), mImageLoader);
         viewHolder.mSceneImageView.setBackgroundColor(mBackColorFactory.get(position));
-        viewHolder.mSceneNameTextView.setText(scene.getName());
+        viewHolder.mSceneNameTextView.setText(scene.getName(mContext));
         return convertView;
     }
 

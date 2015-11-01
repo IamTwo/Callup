@@ -51,7 +51,8 @@ public class BombFragment extends Fragment {
                 int size  = mConversationList.size();
                 Conversation conversation = mConversationList.get(size - position - 1);
                 Intent intent = new Intent(getActivity(), HistoryActivity.class);
-                Friend friend = FriendCache.getInstance().getFriend(conversation.getFriendUserId());
+                Friend friend = FriendCache.getInstance(getActivity())
+                        .getFriend(conversation.getFriendUserId());
                 intent.putExtra(IntentExtraParams.FRIEND, friend);
                 startActivity(intent);
                 getActivity().finish();

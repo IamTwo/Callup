@@ -4,11 +4,18 @@ import android.app.Application;
 
 import com.yuntongxun.ecsdk.ECDevice;
 
+import java.util.List;
+
 import dlmj.callup.BusinessLogic.Alarm.AlarmHelper;
+import dlmj.callup.BusinessLogic.Alarm.AlarmSetManager;
+import dlmj.callup.BusinessLogic.Cache.FriendCache;
+import dlmj.callup.BusinessLogic.Cache.HistoryCache;
 import dlmj.callup.BusinessLogic.Cache.UserCache;
 import dlmj.callup.BusinessLogic.IM.SDKCoreHelper;
+import dlmj.callup.Common.Model.Friend;
 import dlmj.callup.Common.Util.BaseInfoUtil;
 import dlmj.callup.Common.Util.LogUtil;
+import dlmj.callup.DataAccess.AlarmTableManager;
 
 /**
  * Created by Two on 15/9/8.
@@ -31,10 +38,10 @@ public class CallUpApplication extends Application {
         BaseInfoUtil.setContext(mInstance);
         SDKCoreHelper.getInstance();
         AlarmHelper.getInstance(this);
-        Initialize();
+        initialize();
     }
 
-    public void Initialize() {
+    public void initialize() {
         if (SDKCoreHelper.getConnectState() != ECDevice.ECConnectState.CONNECT_SUCCESS) {
             if(UserCache.getInstance().getClientUser() != null) {
                 SDKCoreHelper.initialize(this);
